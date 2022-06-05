@@ -2,7 +2,6 @@
 #### David Leiße #######
 ##### david.leisse@uni-bielefeld.de #####
 
-import tkinter
 import decontamination as dc
 
 import os
@@ -22,6 +21,9 @@ def loadDirectory():
     output.insert(END, "Inputdirectory: " + str(root.directory).split("/")[-1] + "\n")
 
 def Run():
+    """
+    Running devontamination script
+    """
     dc.__Main__(("--dir " + root.directory))
     output.insert(END, "Run complete. Check input directory.\n")
 

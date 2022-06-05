@@ -5,9 +5,6 @@
 from os import listdir
 from os.path import splitext, isfile, join
 import sys
-import json
-
-from zmq import EVENT_CLOSE_FAILED
 
 __usage__ = """
     python3 decontamination.py
