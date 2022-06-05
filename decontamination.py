@@ -2,7 +2,8 @@
 #### David Leiße #######
 ##### david.leisse@uni-bielefeld.de #####
 
-from os import listdir
+from genericpath import isdir
+from os import listdir, mkdir
 from os.path import splitext, isfile, join
 import sys
 
@@ -22,7 +23,7 @@ def get_files(directory: str) -> list:
     """
 
     onlyfiles = [join(directory, f) for f in listdir(directory) if isfile(join(directory, f))]
-    ali = [f for f in onlyfiles if splitext(f)[-1] == ".ali"]
+    ali = [f.split("/")[-1] for f in onlyfiles if splitext(f)[-1] == ".ali"]
     ali.sort()
     log = [f for f in onlyfiles if splitext(f)[-1] == ".log"]
     log.sort()
@@ -40,14 +41,15 @@ def sanity_check(ali,log):
     if not len(ali) == len(log):
         sys.exit("There are not an equal number of .ali files and .log files!!")
 
-def parse_files(file) -> dict:
+def parse_files(directory, file) -> dict:
     """
     Parsing .ali file and putting IDs corresponding to their sequence into a dictionary
 
     :param String file: Path to file
     :return file_dic: dictionary with IDs as key and the corresponding sequence as value.
     """
-    
+    file = directory + "/" + file
+
     with open(file, "r") as f:
         line = f.readline()
 
@@ -94,14 +96,15 @@ def log_task(log, ali_dic):
     
     return mod_ali_dic
 
-def write_output(mod_ali_dic, ali_file):
+def write_output(mod_ali_dic, ali_file, outputdirectory):
     """
     Writing output files from modified dictionary
 
     :param Dictionary mod_ali_dic: modified Dictionary with contents for decontaminated .ali files
     :param String ali_file: path to original .ali file
     """
-    filename = ali_file[:-4] + "_decontaminated.ali"
+    
+    filename = outputdirectory + "/" + ali_file
     with open(filename, "w") as out:
         for id,seq in mod_ali_dic.items():
             out.write(id + "\n")
@@ -111,15 +114,19 @@ def __Main__(args):
     if type(args) == str:
         args = args.strip().split(" ")
     directory = args[args.index("--dir") +1]
+    output_directory = directory + "/decontaminated"
+
+    if not isdir(output_directory):
+        mkdir(output_directory)
 
     ali, log = get_files(directory)
     sanity_check(ali, log)
     for idx,entry in enumerate(ali):
         print(idx)
-        ali_dic = parse_files(entry)
+        ali_dic = parse_files(directory, entry)
         mod_ali_dic = log_task(log[idx], ali_dic)
         if not mod_ali_dic == ali_dic:
-            write_output( mod_ali_dic, entry)
+            write_output( mod_ali_dic, entry, output_directory)
 
 if not sys.argv:
     print("")
