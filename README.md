@@ -9,8 +9,8 @@ Corresponding .ali and .log file should be named the same.
 
 1. Through command line: 
 
-'''python3 decontamination.py --dir <Path to input directory>'''
+```python3 decontamination.py --dir <Path to input directory>```
  
 2. Through GUI:
 
-'''python3 decontamination_GUI.py
+```python3 decontamination_GUI.py
