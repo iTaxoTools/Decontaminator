@@ -105,7 +105,7 @@ def write_output(mod_ali_dic, ali_file):
     with open(filename, "w") as out:
         for id,seq in mod_ali_dic.items():
             out.write(id + "\n")
-            out.write(str(seq) + "\n")
+            out.write(str(seq))
 
 def __Main__(args):
     if type(args) == str:
