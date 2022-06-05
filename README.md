@@ -13,4 +13,4 @@ Corresponding .ali and .log file should be named the same.
  
 2. Through GUI:
 
-```python3 decontamination_GUI.py
+```python3 decontamination_GUI.py```
