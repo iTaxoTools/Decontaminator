@@ -106,9 +106,11 @@ def write_output(mod_ali_dic, ali_file, outputdirectory):
     
     filename = outputdirectory + "/" + ali_file
     with open(filename, "w") as out:
+        out.write("#\n")
+        out.write("#\n")
         for id,seq in mod_ali_dic.items():
-            out.write(id + "\n")
-            out.write(str(seq))
+            out.write(">" + id + "\n")
+            out.write(seq[0])
 
 def __Main__(args):
     if type(args) == str:
