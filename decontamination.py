@@ -41,29 +41,26 @@ def sanity_check(ali,log):
     if not len(ali) == len(log):
         sys.exit("There are not an equal number of .ali files and .log files!!")
 
-def parse_files(directory, file) -> dict:
+def parse_files(directory, file) -> list[str,str]:
     """
-    Parsing .ali file and putting IDs corresponding to their sequence into a dictionary
+    Parsing .ali file and putting IDs corresponding to their sequence into a list
 
     :param String file: Path to file
-    :return file_dic: dictionary with IDs as key and the corresponding sequence as value.
+    :return ls: list of lists with each an Sequence ID and the corresponding sequence.
     """
     file = directory + "/" + file
 
     with open(file, "r") as f:
         line = f.readline()
 
-        duplicates = []
         sequence = []
         header = ""
-        file_dic = {}
+        ls = []
         while line:
             if line.startswith(">"):
 
                 if sequence and header:
-                    if header in file_dic:
-                        duplicates.append(header)
-                    file_dic[header] = sequence
+                    ls.append([header, sequence])
                 
                 sequence = []
                 header = line[1:86].strip()
@@ -73,18 +70,17 @@ def parse_files(directory, file) -> dict:
 
             line = f.readline()
 
-    return file_dic, duplicates
+    return ls
 
-def log_task(log, ali_dic, duplicates):
+def log_task(log, ali_ls):
     """
     Reading corresponding .log file and executing tasks: remove_seq
 
     :param String log: Path to corresponding log file
-    :param Dictionary ali_dic: Dictionary with parsed .ali file
-    :param List duplicates: List of duplicate sequence names that might have occured by shorting the name
-    :return mod_ali: modified Dictionary
+    :param List ali_ls: List with parsed .ali file
+    :return mod_ali: modified .ali file list
     """
-    mod_ali_dic = ali_dic.copy()
+    mod_ali_ls = ali_ls.copy()
 
     task_dic = {}
     with open(log, "r") as f:
@@ -97,18 +93,20 @@ def log_task(log, ali_dic, duplicates):
 
     relevant_duplicates = []
     for id,task in task_dic.items():
-        if id in duplicates:
-            relevant_duplicates.append(id)
         if task == "remove_seq":
-            mod_ali_dic.pop(id)
+            idx_ls = [idx for idx,i in enumerate(mod_ali_ls) if id in i]
+            if len(idx_ls) >= 2:
+                    relevant_duplicates.append(id)
+            for idx in idx_ls:
+                mod_ali_ls.pop(idx)
     
-    return mod_ali_dic, relevant_duplicates
+    return mod_ali_ls, relevant_duplicates
 
-def write_output(mod_ali_dic, ali_file, outputdirectory):
+def write_output(mod_ali_ls, ali_file, outputdirectory):
     """
     Writing output files from modified dictionary
 
-    :param Dictionary mod_ali_dic: modified Dictionary with contents for decontaminated .ali files
+    :param List mod_ali_ls: modified list with contents for decontaminated .ali files
     :param String ali_file: path to original .ali file
     """
     
@@ -116,7 +114,7 @@ def write_output(mod_ali_dic, ali_file, outputdirectory):
     with open(filename, "w") as out:
         out.write("#\n")
         out.write("#\n")
-        for id,seq in mod_ali_dic.items():
+        for id,seq in mod_ali_ls:
             out.write(">" + id + "\n")
             out.write(seq[0])
 
@@ -134,15 +132,13 @@ def __Main__(args):
     ali, log = get_files(directory)
     sanity_check(ali, log)
     for idx,entry in enumerate(ali):
-        if idx == 4:
-            print(entry)
-        print(idx)
-        ali_dic, duplicates_ls = parse_files(directory, entry)
-        mod_ali_dic, relevant_duplicates_ls = log_task(log[idx], ali_dic, duplicates_ls)
+        print("file number: " + str(idx))
+        ali_ls = parse_files(directory, entry)
+        mod_ali_ls, relevant_duplicates_ls = log_task(log[idx], ali_ls)
         if relevant_duplicates_ls:
             duplicates[entry] = relevant_duplicates_ls
-        if not mod_ali_dic == ali_dic:
-            write_output( mod_ali_dic, entry, output_directory)
+        
+        write_output(mod_ali_ls, entry, output_directory)
 
     if duplicates:
         print("Some duplicates have occured during the process")
@@ -150,7 +146,7 @@ def __Main__(args):
         for file, sequenceids in duplicates.items():
             print("In file " + file + " these sequence names have duplicates: " + str(sequenceids))
 
-__Main__("--dir Testdaten2")
+__Main__("--dir Testdaten3")
 
 if not sys.argv:
     print("")
