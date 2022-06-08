@@ -146,8 +146,6 @@ def __Main__(args):
         for file, sequenceids in duplicates.items():
             print("In file " + file + " these sequence names have duplicates: " + str(sequenceids))
 
-__Main__("--dir Testdaten3")
-
 if not sys.argv:
     print("")
 
