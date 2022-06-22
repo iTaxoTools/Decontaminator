@@ -14,3 +14,11 @@ Corresponding .ali and .log file should be named the same.
 2. Through GUI:
 
 ```python3 decontamination_GUI.py```
+
+# Lengthdecont
+Deleting sequences that have too much noninformation data.
+
+## Running the script
+
+1. Through command line:
+```python3 lengthdecont.py --dir <Path to input directory> --thresh <FLOAT> --mode <STRING_'percentage'_OR_'absolute'> --type <STRING_'protein'_OR_'nucleotide'>```
