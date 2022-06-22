@@ -80,11 +80,8 @@ def __Main__(args):
         filtered_seq_ls = length_decont(threshhold, seq_ls, mode, type)
         Utils.write_decont_output(directory, file, filtered_seq_ls, type)
 
-__Main__(["--dir", "Beispieldateien_-_lengthdecont","--thresh","0.1","--mode","percentage","--type","nucleotide"])
 
-"""
 if "--dir" in sys.argv and "--thresh" in sys.argv and "--mode" in sys.argv and "--type" in sys.argv:
     __Main__(sys.argv)
 else:
     print(__Usage__)
-"""
