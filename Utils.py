@@ -55,7 +55,7 @@ def load_ali_file(file) -> list[str,str]:
 
     return ls
 
-def load_fasta_file(file) -> list[str,str]:
+def load_fasta_ali_file(file) -> list[str,str]:
     """
     Loading fasta file into list. List containing lists with each an ID and sequence
 
@@ -64,7 +64,7 @@ def load_fasta_file(file) -> list[str,str]:
     """
 
     with open(file, "r") as f:
-        line = f.readline().strip()
+        line = f.readline()
 
         sequence = []
         header = ""
@@ -72,15 +72,16 @@ def load_fasta_file(file) -> list[str,str]:
         while line:
             
             while line and not line.startswith(">"):
-                sequence.append(line)
-                line = f.readline().strip()
+                if not sequence == "\n":
+                    sequence.append(line.strip())
+                line = f.readline()
 
             if sequence and header:
                 ls.append([header, "".join(sequence)])
                 
             sequence = []
-            header = line[1:] 
-            line = f.readline().strip()
+            header = line[1:].strip()
+            line = f.readline()
     
     return ls
 

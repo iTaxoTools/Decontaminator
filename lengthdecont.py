@@ -37,11 +37,15 @@ def length_decont(threshhold, seq_ls, mode, type):
     filtered_seq_ls = []
     popped_seqs = []
     for i in seq_ls:
+        if i[0] == "Test_test1":
+            print("stop")
         seq = i[1].lower()
         if type == "nucleotide":
             filtered_seq = re.sub('[^atgcryswkm]',"",seq)
-        if type == "protein":
+        elif type == "protein":
             filtered_seq = re.sub('[^arndcqeghilkmfpstwyvuo]',"",seq)
+        else:
+            sys.exit("No correct '--type' argument. Please choose between 'nucleotide' and 'protein'")
 
         if mode == "percentage":
 
@@ -69,16 +73,11 @@ def __Main__(args):
     files = [f for f in listdir(directory) if isfile(join(directory, f))]
     
     for file in files:
-        if type == "protein":
-            seq_ls = Utils.load_ali_file(directory + "/" + file)
-        elif type == "nucleotide":
-            seq_ls = Utils.load_fasta_file(directory + "/" + file)
-        else:
-            print("No correct type argument! Please choose between 'protein' and 'nucleotide'")
-            sys.exit()
+        seq_ls = Utils.load_fasta_ali_file(directory + "/" + file)
         
         filtered_seq_ls = length_decont(threshhold, seq_ls, mode, type)
         Utils.write_decont_output(directory, file, filtered_seq_ls, type)
+
 
 
 if "--dir" in sys.argv and "--thresh" in sys.argv and "--mode" in sys.argv and "--type" in sys.argv:
