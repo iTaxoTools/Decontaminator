@@ -76,15 +76,11 @@ def __Main__(args):
             print("length: " + str(len(modified_seqs)))
             Utils.write_decont_output(dir_path, filename, modified_seqs, type="nucleotides")
 
-__Main__("--dir /Users/david/Documents/Decontaminator/HiDrive-Beispieldateien-terminalbranchlengthdecont --thresh 0.01 --mode internal")
-
-"""
 if not sys.argv:
     print("")
 
-elif "--dir" in sys.argv and "--thresh" in sys.argv:
+elif "--dir" in sys.argv and "--thresh" in sys.argv and "--mode" in sys.argv:
     __Main__(sys.argv)
 
 else:
     print(__Usage__)
-"""
