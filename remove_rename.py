@@ -3,6 +3,10 @@ import Utils
 import glob
 import os
 
+__usage__ = """
+        python3 remove_rename.py
+        --dir <PATH_TO_INPUT_FOLDER>
+"""
 
 
 def read_command_file(file):
@@ -140,4 +144,11 @@ def __Main__(args):
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
     
 
-__Main__("--dir /Users/david/Documents/Decontaminator/HiDrive-Beispieldateien-removerename")
+if not sys.argv:
+    print("")
+
+elif "--dir" in sys.argv:
+    __Main__(sys.argv)
+
+else:
+    print(__Usage__)
