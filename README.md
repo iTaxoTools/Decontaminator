@@ -10,9 +10,9 @@ Input directory should contain .tre files and corresponding .ali and/or fasta fi
 
 ```python3 decontamination_branches.py --dir <Path to input directory> --thresh <Float Threshhold> --mode <String Mode> ```
 
-`--thresh Defines threshhold above which a branchlength is considered to be too large.
+`--thresh` Defines threshhold above which a branchlength is considered to be too large.
 
-`--mode Defines if internal branches ('internal') or terminal branches ('terminal') are analyzed.
+`--mode` Defines if internal branches ('internal') or terminal branches ('terminal') are analyzed.
 
 # remove-rename
 Deleting sequences and renaming sequence names from .ali und .fasta files
