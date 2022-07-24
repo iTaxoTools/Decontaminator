@@ -2,6 +2,7 @@
 import Utils
 import glob
 import os
+import sys
 
 __usage__ = """
         python3 remove_rename.py
@@ -9,7 +10,14 @@ __usage__ = """
 """
 
 
-def read_command_file(file):
+def read_command_file(file: str) -> dict[str,str]:
+    """
+    Parsing command .txt / .log file into a dictionary: "text":"command"
+
+    :param String file: Path to file
+    :return commands: Dictionary with commands and corresponding text
+    """
+    
     commands = {}
     with open(file, "r") as f:
         line = f.readline()
@@ -26,7 +34,17 @@ def read_command_file(file):
 
     return commands
 
-def commands_processing(commands):
+def commands_processing(commands: dict) -> dict[str,str]:
+    """
+    Sorting and processing commandlines by command
+
+    :param Dictionary commands: Dictionary with commands and corresponding text
+
+    :return Dictionary rem_commands: Dictionary with all remove commands
+    :return Dictionary ren_commands: Dictionary with all rename commands
+    :return Dicitonary repin_commands: Dictionary with all replace_in commands
+    :return Dictionary trim_commands: Dictionary with all trim commands
+    """
     rem_commands = {}
     ren_commands = {}
     repin_commands = {}
@@ -49,11 +67,20 @@ def commands_processing(commands):
             repin_commands[l_names] = command
         
         elif "trim" in command:
+            name = name[:-1]
             trim_commands[name] = command
 
-    return rem_commands, ren_commands, repin_commands
+    return rem_commands, ren_commands, repin_commands, trim_commands
 
-def remove_seq(commands, data):
+def remove_seq(commands: dict, data: list[str,str]) -> list[str,str]:
+    """
+    Removing sequences and their names from data list by command.
+
+    :param Dictionary commands: All remove commands and the corresponding text
+    :param List data: List of sequence names and the corresponding sequences
+
+    :return data_removed: Modified data list with specifically removed sequences
+    """
     data_removed = data.copy()
     for name,command in commands.items():
          if command =="remove_seq":
@@ -66,7 +93,16 @@ def remove_seq(commands, data):
 
     return data_removed
 
-def rename_seq(commands, data):
+def rename_seq(commands: dict, data: list[str,str]) -> list[str,str]:
+    """
+    Renaming sequence names in data list by command.
+
+    :param Dictionary commands: All rename commands and the corresponding text
+    :param List data: List of sequence names and the corresponding sequences
+
+    :return data_renamed: Modified data list with specifically renamed sequence names
+    """
+
     data_renamed = data.copy()
     for name, command in commands.items():
         name = name.split(";")
@@ -81,7 +117,15 @@ def rename_seq(commands, data):
     
     return data_renamed
 
-def replace_in_seqname(commands, data):
+def replace_in_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
+    """
+    Replacing substrings in sequence names in data list by command.
+
+    :param Dictionary commands: All replace_in commands and the corresponding text
+    :param List data: List of sequence names and the corresponding sequences
+
+    :return data_replaced: Modified data list with specifically replaced substrings in sequence names
+    """
     data_replaced = []
     for name, seq in data:
         for sub_str in commands.keys():
@@ -96,7 +140,17 @@ def replace_in_seqname(commands, data):
     return data_replaced
 
 
-def trim_seqname(commands, data):
+def trim_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
+    """
+    Trimming sequence names in data list by command.
+    Either trimming after or before a specific character...
+    ... or a specific length of characters from the start or the end of the name.
+
+    :param Dictionary commands: All trim commands and the corresponding text
+    :param List data: List of sequence names and the corresponding sequences
+
+    :return trimmed_data: Modified data list with specifically trimmed sequence names
+    """
     trimmed_data = []
     for name,seq in data:
         for x,command in commands.items():
@@ -129,7 +183,7 @@ def __Main__(args):
 
     txt_file = glob.glob(dir_path + "/*.txt")
     commands_temp = read_command_file(txt_file[0])
-    commands_rem, commands_ren, commands_repin = commands_processing(commands_temp)
+    commands_rem, commands_ren, commands_repin, commands_trim = commands_processing(commands_temp)
 
     for file in all_files:
         filename = os.path.basename(file)
@@ -137,7 +191,7 @@ def __Main__(args):
         data_removed = remove_seq(commands_rem, data)
         data_renamed = rename_seq(commands_ren, data_removed)
         data_replaced = replace_in_seqname(commands_repin, data_renamed)
-        data_trimmed = trim_seqname(commands_repin, data_replaced)
+        data_trimmed = trim_seqname(commands_trim, data_replaced)
         if ".ali" in filename:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="protein")
         else:
@@ -151,4 +205,4 @@ elif "--dir" in sys.argv:
     __Main__(sys.argv)
 
 else:
-    print(__Usage__)
+    print(__usage__)

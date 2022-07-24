@@ -12,10 +12,22 @@ from itertools import chain
 import shutil
 
 __Usage__ = """
-            blub
+            python3 decontamination_branches.py
+            --dir <PATH_TO_INPUT_FOLDER>
+            --thresh <FLOAT_EDGE_LENGTH_THRESHHOLD>
+            --mode <"internal"_or_"terminal"_edge_iteration>
 """
 
-def get_long_edges(tree, threshhold, mode):
+def get_long_edges(tree: den.Tree, threshhold: float, mode: str) -> list[str]:
+    """
+    Iterating through either internal or terminal branches of a Dendropy Tree.
+    If an edge is longer than or equal the threshhold, all descending leafs (terminal nodes) are saved into a list.
+
+    :param Dendropy.Tree tree: A dendropy.tree object from a .tre file
+    :param Float threshhold: Edge length threshhold given by user
+    :param String mode: Selection between "internal" and "terminal" branches.
+
+    """
     leafs = []
     if mode == "internal":
         ls = den.Tree.internal_edges(tree)
@@ -33,7 +45,15 @@ def get_long_edges(tree, threshhold, mode):
                 
     return leafs
 
-def remove_seqs(leafs: list, seqs: list):
+def remove_seqs(leafs: list, seqs: list) -> list[str,str]:
+    """
+    Removing sequences and their name from the list, if names are contained in the leaf list from "get_long_edges"
+
+    :param List leafs: List of leaf node labels (from get_long_edges)
+    :param List seqs: List of sequences and their names from a .fasta or .ali file
+    :return modified_seqs: Modified list of sequences and their names from a .fasta or .ali file.
+    """
+
     modified_seqs = seqs.copy()
     for entry in leafs:
         label = entry.label.replace(" ","_")
@@ -75,6 +95,7 @@ def __Main__(args):
             modified_seqs = remove_seqs(leafs, seqs)
             print("length: " + str(len(modified_seqs)))
             Utils.write_decont_output(dir_path, filename, modified_seqs, type="nucleotides")
+
 
 if not sys.argv:
     print("")
