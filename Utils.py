@@ -7,7 +7,7 @@ from os import mkdir
 from genericpath import isdir
 import os.path
 
-def load_tree(string, mode, schema) -> dendropy.Tree:
+def load_tree(string: str, mode: str, schema: str) -> dendropy.Tree:
     """
     Loading tree from .tre file and plotting it.
     Working with Newick schema until now.
@@ -25,7 +25,7 @@ def load_tree(string, mode, schema) -> dendropy.Tree:
         
     return tree
 
-def load_fasta_ali_file(file) -> list[str,str]:
+def load_fasta_ali_file(file: str) -> list[str,str]:
     """
     Loading fasta file into list. List containing lists with each an ID and sequence
 
@@ -59,7 +59,7 @@ def load_fasta_ali_file(file) -> list[str,str]:
     
     return ls
 
-def write_decont_output(directory, file, seq_ls, type):
+def write_decont_output(directory: str, file: str, seq_ls: list[str,str], type: str):
     """
     Writing output files from modified dictionary
 
@@ -80,7 +80,15 @@ def write_decont_output(directory, file, seq_ls, type):
             out.write(">" + id + "\n")
             out.write(seq + "\n")
 
-def get_index_in_list(value, list):
+def get_index_in_list(value: any, list: list) -> int:
+    """
+    Getting index of list of lists by value.
+
+    :param Any value: value that is searched in list of lists
+    :param List list: corresponding List of lists
+
+    :return index: Index that corresponds to list that contains value
+    """
     index = -1
     for idx,x in enumerate(list):
         if value in x:
@@ -92,7 +100,18 @@ def get_index_in_list(value, list):
     else:
         return index
 
-def get_corresponding_files(tre_files, ali_files, fasta_files):
+def get_corresponding_files(tre_files: list, ali_files: list, fasta_files: list) -> list:
+    """
+    Getting all corresponding files to a .tre file. 
+    Corresponding files are name similar to .tre file.
+    Usually .fasta / .ali files
+
+    :param List tre_files: List of .tre files
+    :param List ali_files: List of .ali files
+    :param List fasta_files: List of .fasta files
+
+    :return file_list: List of lists containing .tre and corresponding .fasta and .ali files
+    """
     file_list = []
     for tre_file in tre_files:
         temp = []
