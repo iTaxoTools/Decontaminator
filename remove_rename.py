@@ -67,7 +67,7 @@ def commands_processing(commands: dict) -> dict[str,str]:
             repin_commands[l_names] = command
         
         elif "trim" in command:
-            name = name[:-1]
+            name = name.replace('"',"")[:-1]
             trim_commands[name] = command
 
     return rem_commands, ren_commands, repin_commands, trim_commands
@@ -85,7 +85,9 @@ def remove_seq(commands: dict, data: list[str,str]) -> list[str,str]:
     for name,command in commands.items():
          if command =="remove_seq":
             try: 
-                index = Utils.get_index_in_list(name, data)
+                index = Utils.get_index_in_list(name, data_removed)
+                if index:
+                    print("stop")
                 data_removed.pop(index)
 
             except: #print(name + "has not been found in " + filename)
@@ -155,17 +157,23 @@ def trim_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
     for name,seq in data:
         for x,command in commands.items():
             if command == "trimseqname_after":
-                name = name[:name.index(x)]
+                try: name = name[:name.index(x)]
+                except: None
             elif command == "trimseqname_before":
-                name = name[name.index(x)+1:]
+                try: name = name[name.index(x)+1:]
+                except: None
             elif command == "trimseqname_afterincl":
-                name = name[:name.index(x)+1]
+                try: name = name[:name.index(x)+1]
+                except: None
             elif command == "trimseqname_beforeincl":
-                name = name[name.index(x):]
+                try: name = name[name.index(x):]
+                except: None
             elif command == "trimseqname_nlastchars":
-                name = name[-x:]
+                try: name = name[-int(x):]
+                except: None
             elif command == "trimseqname_nfirstchars":
-                name = name[:x]
+                try: name = name[:int(x)]
+                except: None
 
         trimmed_data.append([name,seq])
 
@@ -197,7 +205,9 @@ def __Main__(args):
         else:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
     
+__Main__("--dir /Users/david/Development/HiDrive-Beispieldateien-removerename")
 
+"""
 if not sys.argv:
     print("")
 
@@ -206,3 +216,4 @@ elif "--dir" in sys.argv:
 
 else:
     print(__usage__)
+    """
