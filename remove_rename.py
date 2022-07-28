@@ -10,7 +10,7 @@ __usage__ = """
 """
 
 
-def read_command_file(file: str) -> dict[str,str]:
+def read_command_file(file: str) -> list[str,str]:
     """
     Parsing command .txt / .log file into a dictionary: "text":"command"
 
@@ -18,7 +18,7 @@ def read_command_file(file: str) -> dict[str,str]:
     :return commands: Dictionary with commands and corresponding text
     """
     
-    commands = {}
+    commands = []
     with open(file, "r") as f:
         line = f.readline()
 
@@ -27,14 +27,14 @@ def read_command_file(file: str) -> dict[str,str]:
                 parts = line.strip().split(" ")
                 command = parts[0]
                 name = " ".join(parts[1:])
-                commands[name] = command
+                commands.append([name, command])
             
             line = f.readline()
 
 
     return commands
 
-def commands_processing(commands: dict) -> dict[str,str]:
+def commands_processing(commands: list) -> dict[str,str]:
     """
     Sorting and processing commandlines by command
 
@@ -48,8 +48,8 @@ def commands_processing(commands: dict) -> dict[str,str]:
     rem_commands = {}
     ren_commands = {}
     repin_commands = {}
-    trim_commands = {}
-    for name,command in commands.items():
+    trim_commands = []
+    for name,command in commands:
         if command == "remove_seq":
             s_name = name.replace('"',"")[:-1]
             rem_commands[s_name] = command
@@ -68,7 +68,7 @@ def commands_processing(commands: dict) -> dict[str,str]:
         
         elif "trim" in command:
             name = name.replace('"',"")[:-1]
-            trim_commands[name] = command
+            trim_commands.append([name,command])
 
     return rem_commands, ren_commands, repin_commands, trim_commands
 
@@ -142,7 +142,7 @@ def replace_in_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
     return data_replaced
 
 
-def trim_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
+def trim_seqname(commands: list, data: list[str,str]) -> list[str,str]:
     """
     Trimming sequence names in data list by command.
     Either trimming after or before a specific character...
@@ -154,8 +154,10 @@ def trim_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
     :return trimmed_data: Modified data list with specifically trimmed sequence names
     """
     trimmed_data = []
+    print(commands)
     for name,seq in data:
-        for x,command in commands.items():
+        for x,command in commands:
+            #print(name)
             if command == "trimseqname_after":
                 try: name = name[:name.index(x)]
                 except: None
@@ -204,7 +206,7 @@ def __Main__(args):
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="protein")
         else:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
-    
+
 if not sys.argv:
     print("")
 
