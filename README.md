@@ -27,7 +27,7 @@ Entferne Sequenz anhand Sequenzname
 `remove_seq <"Seqname">;`
 
 Umbennenen des Sequenznamens
-`rename_seq <"old Seqname"> <"new Seqname">; `
+`rename_seqname <"old Seqname"> <"new Seqname">; `
 
 Ersetzen eines Strings innerhalb eines Sequenznamens
 `replacein_seqname <"old Substring"> <"new Substring">; `
