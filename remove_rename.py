@@ -69,6 +69,8 @@ def commands_processing(commands: list) -> dict[str,str]:
         elif "trim" in command:
             name = name.replace('"',"")[:-1]
             trim_commands.append([name,command])
+        
+        else: print("Your command " + command + "does not seem to be correct. Please check your command file again.")
 
     return rem_commands, ren_commands, repin_commands, trim_commands
 
