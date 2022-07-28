@@ -205,9 +205,6 @@ def __Main__(args):
         else:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
     
-__Main__("--dir /Users/david/Development/HiDrive-Beispieldateien-removerename")
-
-"""
 if not sys.argv:
     print("")
 
@@ -216,4 +213,3 @@ elif "--dir" in sys.argv:
 
 else:
     print(__usage__)
-    """
