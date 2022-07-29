@@ -41,7 +41,7 @@ def sanity_check(ali,log):
     if not len(ali) == len(log):
         sys.exit("There are not an equal number of .ali files and .log files!!")
 
-def parse_files(directory, file) -> list[str,str]:
+def parse_files(directory, file) -> list:
     """
     Parsing .ali file and putting IDs corresponding to their sequence into a list
 

@@ -25,7 +25,7 @@ def load_tree(string: str, mode: str, schema: str) -> dendropy.Tree:
         
     return tree
 
-def load_fasta_ali_file(file: str) -> list[str,str]:
+def load_fasta_ali_file(file: str) -> list:
     """
     Loading fasta file into list. List containing lists with each an ID and sequence
 
@@ -59,7 +59,7 @@ def load_fasta_ali_file(file: str) -> list[str,str]:
     
     return ls
 
-def write_decont_output(directory: str, file: str, seq_ls: list[str,str], type: str):
+def write_decont_output(directory: str, file: str, seq_ls: list, type: str):
     """
     Writing output files from modified dictionary
 

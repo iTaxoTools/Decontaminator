@@ -10,6 +10,8 @@ import sys
 import glob
 from itertools import chain
 import shutil
+from os import mkdir
+from genericpath import isdir
 
 __Usage__ = """
             python3 decontamination_branches.py
@@ -18,7 +20,7 @@ __Usage__ = """
             --mode <"internal"_or_"terminal"_edge_iteration>
 """
 
-def get_long_edges(tree: den.Tree, threshhold: float, mode: str) -> list[str]:
+def get_long_edges(tree: den.Tree, threshhold: float, mode: str) -> list:
     """
     Iterating through either internal or terminal branches of a Dendropy Tree.
     If an edge is longer than or equal the threshhold, all descending leafs (terminal nodes) are saved into a list.
@@ -45,7 +47,7 @@ def get_long_edges(tree: den.Tree, threshhold: float, mode: str) -> list[str]:
                 
     return leafs
 
-def remove_seqs(leafs: list, seqs: list) -> list[str,str]:
+def remove_seqs(leafs: list, seqs: list) -> list:
     """
     Removing sequences and their name from the list, if names are contained in the leaf list from "get_long_edges"
 
@@ -69,6 +71,10 @@ def __Main__(args):
     dir_path = args[args.index("--dir") +1]
     threshhold = float(args[args.index("--thresh") +1])
     mode = args[args.index("--mode") +1]
+
+    outpath = os.path.join(dir_path, "decontaminated")
+    if not isdir(outpath):
+        mkdir(outpath)
 
     tre_files = glob.glob(dir_path + "/*.tre")
     ali_files = glob.glob(dir_path + "/*.ali")

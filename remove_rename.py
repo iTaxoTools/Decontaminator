@@ -10,7 +10,7 @@ __usage__ = """
 """
 
 
-def read_command_file(file: str) -> list[str,str]:
+def read_command_file(file: str) -> list:
     """
     Parsing command .txt / .log file into a dictionary: "text":"command"
 
@@ -34,7 +34,7 @@ def read_command_file(file: str) -> list[str,str]:
 
     return commands
 
-def commands_processing(commands: list) -> dict[str,str]:
+def commands_processing(commands: list) -> dict:
     """
     Sorting and processing commandlines by command
 
@@ -74,7 +74,7 @@ def commands_processing(commands: list) -> dict[str,str]:
 
     return rem_commands, ren_commands, repin_commands, trim_commands
 
-def remove_seq(commands: dict, data: list[str,str]) -> list[str,str]:
+def remove_seq(commands: dict, data: list) -> list:
     """
     Removing sequences and their names from data list by command.
 
@@ -97,7 +97,7 @@ def remove_seq(commands: dict, data: list[str,str]) -> list[str,str]:
 
     return data_removed
 
-def rename_seq(commands: dict, data: list[str,str]) -> list[str,str]:
+def rename_seq(commands: dict, data: list) -> list:
     """
     Renaming sequence names in data list by command.
 
@@ -121,7 +121,7 @@ def rename_seq(commands: dict, data: list[str,str]) -> list[str,str]:
     
     return data_renamed
 
-def replace_in_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
+def replace_in_seqname(commands: dict, data: list) -> list:
     """
     Replacing substrings in sequence names in data list by command.
 
@@ -144,7 +144,7 @@ def replace_in_seqname(commands: dict, data: list[str,str]) -> list[str,str]:
     return data_replaced
 
 
-def trim_seqname(commands: list, data: list[str,str]) -> list[str,str]:
+def trim_seqname(commands: list, data: list) -> list:
     """
     Trimming sequence names in data list by command.
     Either trimming after or before a specific character...
