@@ -147,9 +147,7 @@ def __Main__(args):
                 print("length of " + str(filename) + " after: " + str(len(modified_seqs)))
                 Utils.write_decont_output(dir_path, filename, modified_seqs, type="nucleotides")
 
-__Main__("--dir /Users/david/Development/Decontaminator-2/HiDrive-Beispieldateien-terminalbranchlengthdecont --quantile 0.9 --mode terminal")
 
-"""
 if not sys.argv:
     print("")
 
@@ -158,4 +156,3 @@ elif "--dir" in sys.argv and "--mode" in sys.argv:
 
 else:
     print(__Usage__)
-"""
