@@ -53,7 +53,7 @@ def load_fasta_ali_file(file: str) -> list:
             header = line[1:].strip()
             for character in characters:
                 if character in header:
-                    header.replace(character, "_")
+                    header = header.replace(character, "_")
 
             line = f.readline()
     

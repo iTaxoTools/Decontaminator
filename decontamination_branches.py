@@ -12,6 +12,9 @@ from itertools import chain
 import shutil
 from os import mkdir
 from genericpath import isdir
+import numpy as np
+from scipy.stats import norm
+import matplotlib.pyplot as plt
 
 __Usage__ = """
             python3 decontamination_branches.py
@@ -47,6 +50,36 @@ def get_long_edges(tree: den.Tree, threshhold: float, mode: str) -> list:
                 
     return leafs
 
+def get_quantile_long_edges(mode: str, tree: den.Tree, quantile: float):
+
+
+    leafs = []
+    if mode == "internal":
+        ls = den.Tree.internal_edges(tree)
+    elif mode == "terminal":
+        ls = den.Tree.leaf_edges(tree)
+    else:
+        sys.exit("Please select mode between 'internal' and 'terminal'")
+
+    lengths =[]
+    for edge in ls:
+        if edge.length:
+            lengths.append(edge.length)
+
+    cutoff = np.quantile(lengths, quantile)
+    print("Quantile cutoff: " + str(cutoff))
+
+    for edge in ls:
+        if edge.length:
+            if edge.length > cutoff:
+                print(edge.length)
+                node = edge.head_node
+                for leaf in node.leaf_iter():
+                    print(leaf.taxon)
+                    leafs.append(leaf.taxon)
+    
+    return leafs
+
 def remove_seqs(leafs: list, seqs: list) -> list:
     """
     Removing sequences and their name from the list, if names are contained in the leaf list from "get_long_edges"
@@ -69,8 +102,16 @@ def __Main__(args):
         args = args.strip().split(" ")
 
     dir_path = args[args.index("--dir") +1]
-    threshhold = float(args[args.index("--thresh") +1])
     mode = args[args.index("--mode") +1]
+
+
+    threshhold = 0
+    if "--thresh" in args:
+        threshhold = float(args[args.index("--thresh") +1])
+
+    quantile = 0
+    if "--quantile" in args:
+        quantile = float(args[args.index("--quantile") +1])
 
     outpath = os.path.join(dir_path, "decontaminated")
     if not isdir(outpath):
@@ -90,24 +131,31 @@ def __Main__(args):
             dest = os.path.join(dir_path, "decontaminated" ,os.path.basename(files[0]))
             shutil.copy(files[0], dest)
 
-        leafs = get_long_edges(tree,threshhold, mode)
-        for seq_file in files[1:]:
+            if threshhold:
+                leafs = get_long_edges(tree,threshhold, mode)
+            if quantile:
+                leafs = get_quantile_long_edges(mode, tree, quantile)
+                print("All taxa on too long branches: " + str(leafs))
 
-            filename = os.path.basename(seq_file)
-            seqs = Utils.load_fasta_ali_file(seq_file)
-            print("length: " + str(len(seqs)))
+            for seq_file in files[1:]:
+                filename = os.path.basename(seq_file)
+                seqs = Utils.load_fasta_ali_file(seq_file)
+                print("length of " + str(filename) + " before: " + str(len(seqs)))
 
-        
-            modified_seqs = remove_seqs(leafs, seqs)
-            print("length: " + str(len(modified_seqs)))
-            Utils.write_decont_output(dir_path, filename, modified_seqs, type="nucleotides")
+            
+                modified_seqs = remove_seqs(leafs, seqs)
+                print("length of " + str(filename) + " after: " + str(len(modified_seqs)))
+                Utils.write_decont_output(dir_path, filename, modified_seqs, type="nucleotides")
 
+__Main__("--dir /Users/david/Development/Decontaminator-2/HiDrive-Beispieldateien-terminalbranchlengthdecont --quantile 0.9 --mode terminal")
 
+"""
 if not sys.argv:
     print("")
 
-elif "--dir" in sys.argv and "--thresh" in sys.argv and "--mode" in sys.argv:
+elif "--dir" in sys.argv and "--mode" in sys.argv:
     __Main__(sys.argv)
 
 else:
     print(__Usage__)
+"""
