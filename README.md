@@ -23,31 +23,31 @@ and one .log/.txt file containing all commands.
 
 ## Commands in .log/.txt file
 
-Entferne Sequenz anhand Sequenzname
+Remove a sequence based on its sequence name
 `remove_seq <"Seqname">;`
 
-Umbennenen des Sequenznamens
+Rename a sequence
 `rename_seqname <"old Seqname"> <"new Seqname">; `
 
-Ersetzen eines Strings innerhalb eines Sequenznamens
+Replace a string of characters within sequence names
 `replacein_seqname <"old Substring"> <"new Substring">; `
 
-Löschen des Sequenznamens hinter bestimmtem Zeichen (Zeichen wird mit gelöscht)
+Trim part of sequence names that follows a specific character (the character will also be deleted)
 `trimseqname_after <"Character">; `
 
-Löschen des Sequenznamens vor bestimmtem Zeichen (Zeichen wird mit gelöscht)
+Trim part of sequence names that precedes a specific character (the character will also be deleted)
 `trimseqname_before <"Character">; `
 
-Löschen des Sequenznamens vor bestimmtem Zeichen (Zeichen wird nicht gelöscht)
+Trim part of sequence names that follows a specific character (the character will not be deleted)
 `trimseqname_afterincl <"Character">;`
 
-Löschen des Sequenznamens vor bestimmtem Zeichen (Zeichen wird nicht gelöscht)
+Trim part of sequence names that precedes a specific character (the character will not be deleted)
 `trimseqname_beforeincl <"Character">; `
 
-Löschen der Anzahl Zeichen am Ende des Sequenznamens
+Delete a specified number of characters at the end of each sequence name
 `trimseqname_nlastchars <Integer>;`
 
-Löschen der Anzahl Zeichen am Anfang des Sequenznamens
+Delete a specified number of characters at the start of each sequence name
 `trimseqname_nfirstchars <Integer>;`
 
 ## Running script
