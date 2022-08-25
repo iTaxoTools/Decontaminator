@@ -58,8 +58,8 @@ Löschen der Anzahl Zeichen am Anfang des Sequenznamens
 Deleting sequences from .ali files
 
 ## Preparing files
-Input direcotry should contain equal amount of .ali and .log files.
-Corresponding .ali and .log file should be named the same.
+All .ali and .log files from previous step should be in one directory (folder). This input directory should contain an equal amount of .ali and .log files.
+The corresponding .ali and .log file should have identical filenames except for the extensions. The modified (decontaminated) .ali files will be written into a new directory.
 
 ## Running the script
 
