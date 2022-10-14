@@ -59,7 +59,7 @@ def load_fasta_ali_file(file: str) -> list:
     
     return ls
 
-def write_decont_output(directory: str, file: str, seq_ls: list, type: str):
+def write_decont_output(directory: str, file: str, seq_ls: list, type: str, folder = "decontaminated"):
     """
     Writing output files from modified dictionary
 
@@ -67,7 +67,7 @@ def write_decont_output(directory: str, file: str, seq_ls: list, type: str):
     :param String ali_file: path to original .ali file
     """
 
-    output_directory = directory + "/decontaminated"
+    output_directory = directory + "/" + folder
     if not isdir(output_directory):
         mkdir(output_directory)
 
