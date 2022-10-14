@@ -50,6 +50,12 @@ Delete a specified number of characters at the end of each sequence name
 Delete a specified number of characters at the start of each sequence name
 `trimseqname_nfirstchars <Integer>;`
 
+### Extract Sequences
+
+You can extract sequences by using the `extract_seq <"Seqname">;` command.
+This command is handled outside of the other commands and creates an additional folder where all files with extracted sequences can be found.
+!These extracted sequences are not affected by any other commands that might fit to these sequences!
+
 ## Running script
 
 ```python3 remove_rename.py --dir <Path to input directory>```
