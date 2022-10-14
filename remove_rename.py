@@ -19,6 +19,7 @@ def read_command_file(file: str) -> list:
     """
     
     commands = []
+    characters = ["@"," "]
     with open(file, "r") as f:
         line = f.readline()
 
@@ -26,7 +27,9 @@ def read_command_file(file: str) -> list:
             if not line == "\n":
                 parts = line.strip().split(" ")
                 command = parts[0]
-                name = " ".join(parts[1:])
+                name = "_".join(parts[1:])
+                for character in characters:
+                    name = name.replace(character,"_")
                 commands.append([name, command])
             
             line = f.readline()
@@ -46,6 +49,7 @@ def commands_processing(commands: list) -> dict:
     :return Dictionary trim_commands: Dictionary with all trim commands
     """
     rem_commands = {}
+    extr_commands = {}
     ren_commands = {}
     repin_commands = {}
     trim_commands = []
@@ -54,6 +58,10 @@ def commands_processing(commands: list) -> dict:
             s_name = name.replace('"',"")[:-1]
             rem_commands[s_name] = command
         
+        elif command == "extract_seq":
+            e_name = name.replace('"',"")[:-1]
+            extr_commands[e_name] = command
+            
         elif command == "rename_seqname":
             names =  name.split('"')
             indices = [1,3]
@@ -72,7 +80,7 @@ def commands_processing(commands: list) -> dict:
         
         else: print("Your command " + command + "does not seem to be correct. Please check your command file again.")
 
-    return rem_commands, ren_commands, repin_commands, trim_commands
+    return rem_commands, extr_commands, ren_commands, repin_commands, trim_commands
 
 def remove_seq(commands: dict, data: list) -> list:
     """
@@ -92,10 +100,30 @@ def remove_seq(commands: dict, data: list) -> list:
                     print("stop")
                 data_removed.pop(index)
 
-            except: #print(name + "has not been found in " + filename)
-                    print()
+            except: print(name + "has not been found in ")
 
     return data_removed
+
+def extract_seq(commands: dict, data:list) -> list:
+    """
+    Extracting sequences and their names from data list by command.
+
+    :param Dictionary commands: All remove commands and the corresponding text
+    :param List data: List of sequence names and the corresponding sequences
+
+    :return data_extracted: Modified data list with specifically extracted sequences
+    """
+    data_extracted = []
+    for name,command in commands.items():
+        if command == "extract_seq":
+            try:
+                index = Utils.get_index_in_list(name, data)
+                data_extracted.append(data[index])
+            
+            except: print(name + "has not been found")
+                
+
+    return data_extracted
 
 def rename_seq(commands: dict, data: list) -> list:
     """
@@ -159,7 +187,6 @@ def trim_seqname(commands: list, data: list) -> list:
     print(commands)
     for name,seq in data:
         for x,command in commands:
-            #print(name)
             if command == "trimseqname_after":
                 try: name = name[:name.index(x)]
                 except: None
@@ -195,19 +222,21 @@ def __Main__(args):
 
     txt_file = glob.glob(dir_path + "/*.txt")
     commands_temp = read_command_file(txt_file[0])
-    commands_rem, commands_ren, commands_repin, commands_trim = commands_processing(commands_temp)
+    commands_rem, extr_commands, commands_ren, commands_repin, commands_trim = commands_processing(commands_temp)
 
     for file in all_files:
         filename = os.path.basename(file)
         data = Utils.load_fasta_ali_file(file)
         data_removed = remove_seq(commands_rem, data)
-        data_renamed = rename_seq(commands_ren, data_removed)
+        data_extracted = extract_seq(extr_commands, data_removed)
+        data_renamed = rename_seq(commands_ren, data_extracted)
         data_replaced = replace_in_seqname(commands_repin, data_renamed)
         data_trimmed = trim_seqname(commands_trim, data_replaced)
         if ".ali" in filename:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="protein")
         else:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
+
 
 if not sys.argv:
     print("")
