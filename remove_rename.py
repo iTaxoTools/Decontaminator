@@ -236,8 +236,8 @@ def __Main__(args):
         else:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
         
-        if extr_commands:
-            data_extracted = extract_seq(extr_commands, data)
+        data_extracted = extract_seq(extr_commands, data)
+        if data_extracted:
             if ".ali" in filename:
                 Utils.write_decont_output(dir_path, filename, data_extracted, type="protein", folder = "extracted_seqs")
             else:
