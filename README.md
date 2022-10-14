@@ -53,7 +53,7 @@ Delete a specified number of characters at the start of each sequence name
 ### Extract Sequences
 
 You can extract sequences by using the `extract_seq <"Seqname">;` command.
-This command is handled outside of the other commands and creates an additional folder where all files with extracted sequences can be found.
+This command is handled outside of the other commands and creates an additional folder where all files with extracted sequences can be found. /n
 !These extracted sequences are not affected by any other commands that might fit to these sequences!
 
 ## Running script
