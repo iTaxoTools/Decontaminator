@@ -228,15 +228,20 @@ def __Main__(args):
         filename = os.path.basename(file)
         data = Utils.load_fasta_ali_file(file)
         data_removed = remove_seq(commands_rem, data)
-        data_extracted = extract_seq(extr_commands, data_removed)
-        data_renamed = rename_seq(commands_ren, data_extracted)
+        data_renamed = rename_seq(commands_ren, data_removed)
         data_replaced = replace_in_seqname(commands_repin, data_renamed)
         data_trimmed = trim_seqname(commands_trim, data_replaced)
         if ".ali" in filename:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="protein")
         else:
             Utils.write_decont_output(dir_path, filename, data_trimmed, type="nuclotide")
-
+        
+        if extr_commands:
+            data_extracted = extract_seq(extr_commands, data)
+            if ".ali" in filename:
+                Utils.write_decont_output(dir_path, filename, data_extracted, type="protein", folder = "extracted_seqs")
+            else:
+                Utils.write_decont_output(dir_path, filename, data_extracted, type="nuclotide", folder = "extracted_seqs")
 
 if not sys.argv:
     print("")
