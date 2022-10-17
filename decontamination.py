@@ -52,7 +52,7 @@ def parse_files(directory, file) -> list:
 
     with open(file, "r") as f:
         line = f.readline()
-
+        
         sequence = []
         header = ""
         ls = []
@@ -64,7 +64,7 @@ def parse_files(directory, file) -> list:
                 
                 sequence = []
                 header = line[1:86].strip()
-            
+
             else:
                 sequence.append(line)
 
@@ -74,13 +74,14 @@ def parse_files(directory, file) -> list:
 
 def log_task(log, ali_ls):
     """
-    Reading corresponding .log file and executing tasks: remove_seq
+    Reading corresponding .log file and executing tasks: remove_seq, extract_seq
 
     :param String log: Path to corresponding log file
     :param List ali_ls: List with parsed .ali file
     :return mod_ali: modified .ali file list
     """
     mod_ali_ls = ali_ls.copy()
+    extracted_seqs = []
 
     task_dic = {}
     with open(log, "r") as f:
@@ -99,18 +100,29 @@ def log_task(log, ali_ls):
                     relevant_duplicates.append(id)
             for idx in idx_ls:
                 mod_ali_ls.pop(idx)
-    
-    return mod_ali_ls, relevant_duplicates
+        
+        elif task == "extract_seq":
+            idx_ls = [idx for idx,i in enumerate(ali_ls) if id in i]
+            for idx in idx_ls:
+                extracted_seqs.append(ali_ls[idx])
 
-def write_output(mod_ali_ls, ali_file, outputdirectory):
+    
+    return mod_ali_ls, relevant_duplicates, extracted_seqs
+
+def write_output(mod_ali_ls, ali_file, directory, output_directory):
     """
     Writing output files from modified dictionary
 
     :param List mod_ali_ls: modified list with contents for decontaminated .ali files
     :param String ali_file: path to original .ali file
     """
+
+    output_directory = directory + "/" + output_directory
+
+    if not isdir(output_directory):
+        mkdir(output_directory)
     
-    filename = outputdirectory + "/" + ali_file
+    filename = output_directory + "/" + ali_file
     with open(filename, "w") as out:
         out.write("#\n")
         out.write("#\n")
@@ -122,10 +134,6 @@ def __Main__(args):
     if type(args) == str:
         args = args.strip().split(" ")
     directory = args[args.index("--dir") +1]
-    output_directory = directory + "/decontaminated"
-
-    if not isdir(output_directory):
-        mkdir(output_directory)
 
     duplicates = {}
 
@@ -134,11 +142,14 @@ def __Main__(args):
     for idx,entry in enumerate(ali):
         print("file number: " + str(idx))
         ali_ls = parse_files(directory, entry)
-        mod_ali_ls, relevant_duplicates_ls = log_task(log[idx], ali_ls)
+        mod_ali_ls, relevant_duplicates_ls, extracted_ls = log_task(log[idx], ali_ls)
         if relevant_duplicates_ls:
             duplicates[entry] = relevant_duplicates_ls
         
-        write_output(mod_ali_ls, entry, output_directory)
+        write_output(mod_ali_ls, entry, directory, "decontaminated")
+
+        if extracted_ls:
+            write_output(extracted_ls, entry, directory, "extracted")
 
     if duplicates:
         print("Some duplicates have occured during the process")
