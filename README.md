@@ -67,6 +67,14 @@ Deleting sequences from .ali files
 All .ali and .log files from previous step should be in one directory (folder). This input directory should contain an equal amount of .ali and .log files.
 The corresponding .ali and .log file should have identical filenames except for the extensions. The modified (decontaminated) .ali files will be written into a new directory.
 
+## Commands in .log/.txt file
+
+Remove a sequence based on its sequence name
+`remove_seq <"Seqname">`
+
+Extract a sequence based on its sequence name
+`extract_seq <"Seqname">`
+
 ## Running the script
 
 1. Through command line: 
