@@ -15,7 +15,7 @@ Input directory should contain .tre files and corresponding .ali and/or fasta fi
 
 `--target` Defines what type of file should be decontaminated. Selection between 'alignment', 'tree' or 'both'.
 
-###Additional arguments:
+### Additional arguments:
 
 `--perc` Outputs a defined percentage (between 0.0 and 1.0) of longest branches and deletes them from target. --perc <Float>
 
