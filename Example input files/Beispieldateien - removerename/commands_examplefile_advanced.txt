@@ -1,0 +1,13 @@
+replacein_seqname "Podarcis sp." "Podarcis liolepis";
+replacein_seqname " " "_";
+
+trimseqname_after "@";
+trimseqname_before "@";
+
+
+trimseqname_afterincl "@";
+trimseqname_beforeincl "@";
+
+
+trimseqname_nlastchars 5;
+trimseqname_nlastchars  7;

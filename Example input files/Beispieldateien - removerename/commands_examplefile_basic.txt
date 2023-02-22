@@ -1,0 +1,7 @@
+remove_seq "Discoglossus pictus_BeniSnassen_MVTIS3191_TXO51@TRINITY_DN35718_c0_g1_i1_1.H1.1";
+remove_seq "Discoglossus pictus";
+
+rename_seqname "Lygodactylus sp_Antrema_FGZC5727@TRINITY_DN17600_c0_g1_i1_1.H1.1" "Lygodactylus tolampyae"  ;
+rename_seqname "Lygodactylus sp_Antrema_FGZC5727@8449" "Lygodactylus tolampyae";
+rename_seqname "Lygodactylus sp_Antrema_FGZC5727@8449" "Lygodactylus tolampyae";
+
