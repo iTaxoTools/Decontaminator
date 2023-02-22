@@ -6,6 +6,7 @@ import dendropy
 from os import mkdir
 from genericpath import isdir
 import os.path
+from itertools import chain
 
 def load_tree(string: str, mode: str, schema: str) -> dendropy.Tree:
     """
@@ -130,3 +131,60 @@ def get_corresponding_files(tre_files: list, ali_files: list, fasta_files: list)
         file_list.append(temp)
 
     return file_list
+
+def get_sister_nodes(tree: dendropy.Tree) -> list[list[str,str]]:
+    """
+    Getting sister species from Tree.
+    If a species does not have a direct sister species it is assigned a random species from its sister clade.
+    :param dendropy.Tree tree: Current Tree from which species are taken
+    :return List complete_sister_taxa: List containing all "sister" species
+    """
+    #-------------- getting sister species ----------------#
+    sister_taxa = []
+    for nd in tree.preorder_node_iter():
+        children = nd.child_nodes()
+        if len(children) == 2 and all(map(lambda n: n.is_leaf(), children)):
+            temp = []
+            for n in children:
+                temp.append(n)
+            sister_taxa.append(temp)
+            temp_reverse = list(reversed(temp))
+            sister_taxa.append(temp_reverse)
+                                         
+    ##------------ getting sister clades for species without sister species ------------##
+
+    complete_sister_taxa = sister_taxa.copy()
+    leafs = []
+    for nd in tree.leaf_node_iter():
+        leafs.append(nd)
+            
+    missing_taxa = list(filter(lambda x: x not in chain(*sister_taxa), leafs))
+
+    for nd in tree.leaf_node_iter():
+        if nd in missing_taxa:
+            parent = nd.parent_node
+            sisters = parent.leaf_nodes()
+            complete_sister_taxa.append([nd,[x for x in sisters if not x == nd]])
+
+    return complete_sister_taxa     
+
+def process_cmd_arguments(defaults, arg_list, cmdline):
+    inputs = []
+    for x,arg in enumerate(arg_list):
+        temp = "--" + arg
+        if temp in cmdline:
+            if type(defaults[x]) != str:
+                inputs.append(float(cmdline[cmdline.index(temp) +1]))
+            else:
+                inputs.append(cmdline[cmdline.index(temp) +1])
+
+        else:
+            inputs.append(defaults[x])
+
+    #for logging purposes#
+    logging_x = [inputs.index(x) for x in inputs if x][:-1]
+    logginglist = [arg_list[x] + ": " + str(inputs[x]) for x in logging_x]
+    loggingstr = "\n".join(logginglist)
+    inputs.append(loggingstr)
+
+    return inputs
