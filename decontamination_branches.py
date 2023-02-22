@@ -282,9 +282,6 @@ def __Main__(cmdline):
             decontaminate_files(target, dataset, leafs, dest, tree)
             logging.info("")
 
-
-__Main__("--dir /Users/david/Development/Decontaminator/Decontaminator-1/HiDrive-Beispieldateien-terminalbranchlengthdecont --mode terminal --referencetree /Users/david/Development/Decontaminator/Decontaminator-1/HiDrive-Beispieldateien-terminalbranchlengthdecont/HiDrive-reference-trees/ReferenceTree1_Phylogram_withbootstraps.tre --factor 1 --target alignment")
-
 if not sys.argv:
     print("")
 
