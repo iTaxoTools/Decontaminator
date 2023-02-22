@@ -1,6 +1,7 @@
 # decontamination branches
 Searching for branches in tree that exceed a certain length 
 and deleting all sequences in corresponding .ali and .fasta files that are descendants from this branch.
+Also able to delete respective branches from tree.
 
 ## Preparing files
 Input directory should contain .tre files and corresponding .ali and/or fasta files.
@@ -8,11 +9,23 @@ Input directory should contain .tre files and corresponding .ali and/or fasta fi
 
 ## Running script
 
-```python3 decontamination_branches.py --dir <Path to input directory> --thresh <Float Threshhold> --mode <String Mode> ```
-
-`--thresh` Defines threshhold above which a branchlength is considered to be too large.
+```python3 decontamination_branches.py --dir <Path to input directory> --mode <String> --target <String>```
 
 `--mode` Defines if internal branches ('internal') or terminal branches ('terminal') are analyzed.
+
+`--target` Defines what type of file should be decontaminated. Selection between 'alignment', 'tree' or 'both'.
+
+###Additional arguments:
+
+`--perc` Outputs a defined percentage (between 0.0 and 1.0) of longest branches and deletes them from target. --perc <Float>
+
+`--absolute` Outputs a defined number of longest branches and deletes them from target. --absolute <Integer>
+
+`--quantile` Outputs a number of branches that are longer than the critical value of the defined quantile (between 0.0 and 1.0) and deletes them from target. --quantile <Float>
+
+`--factor` Outputs a number of branches that are longer by a given factor than the mean length of their sister species and deletes them from target. --factor <Integer>
+
+`--referencetree` Outputs a number of branches that are longer by a factor than their counter part in the reference tree and deletes them from target. --referencetree <Path to reference .tre file>
 
 # remove-rename
 Deleting sequences and renaming sequence names from .ali und .fasta files
