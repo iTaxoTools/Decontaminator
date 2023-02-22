@@ -26,6 +26,9 @@ Input directory should contain .tre files and corresponding .ali and/or fasta fi
 `--factor` Outputs a number of branches that are longer by a given factor than the mean length of their sister species and deletes them from target. --factor <Integer>
 
 `--referencetree` Outputs a number of branches that are longer by a factor than their counter part in the reference tree and deletes them from target. --referencetree <Path to reference .tre file>
+ 
+ ### Logging
+ All processes and deleted branches are logged in a log.txt! Please check the log file after each run for Problems that might occur.
 
 # remove-rename
 Deleting sequences and renaming sequence names from .ali und .fasta files
