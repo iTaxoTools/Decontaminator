@@ -2,8 +2,9 @@
 ### David Leiße ###
 ### david.leisse@uni-bielefeld.de###
 
-import shutil
 import Utils
+
+import shutil
 import dendropy as den
 import os.path
 import sys
@@ -13,10 +14,6 @@ import shutil
 from os import mkdir
 from genericpath import isdir
 import numpy as np
-from scipy.stats import norm
-import matplotlib.pyplot as plt
-import itertools as it
-import gc
 import logging
 
 
@@ -285,7 +282,7 @@ def __Main__(cmdline):
 if not sys.argv:
     print("")
 
-elif "--dir" in sys.argv and "--mode" in sys.argv:
+elif "--dir" in sys.argv:
     __Main__(sys.argv)
 
 else:

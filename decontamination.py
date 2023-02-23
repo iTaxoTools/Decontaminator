@@ -163,8 +163,6 @@ def __Main__(args):
         for file, sequenceids in duplicates.items():
             print("In file " + file + " these sequence names have duplicates: " + str(sequenceids))
 
-__Main__("--dir /Users/david/Decontaminator/decontamination")
-
 if not sys.argv:
     print("")
 
