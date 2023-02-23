@@ -1,0 +1,5 @@
+DendroPy==4.5.2
+numpy==1.24.2
+pip==23.0
+setuptools==67.1.0
+wheel==0.38.4

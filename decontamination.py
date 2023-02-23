@@ -14,7 +14,7 @@ __usage__ = """
 
 
 def get_files(directory: str) -> list:
-    """
+    """ 
     Getting all .ali and .log files from the input directory.
 
     :param String directory: Path to input directory.
@@ -27,8 +27,13 @@ def get_files(directory: str) -> list:
     ali.sort()
     log = [f for f in onlyfiles if splitext(f)[-1] == ".log"]
     log.sort()
+    if not len(log) == len(ali):
+        lengths = [len(log),len(ali)]
+        index = lengths[lengths.index(min(lengths))]
+        print(index)
 
-    return ali, log
+
+    return ali[:index], log[:index]
 
 def sanity_check(ali,log):
     """
@@ -39,7 +44,7 @@ def sanity_check(ali,log):
     """
     
     if not len(ali) == len(log):
-        sys.exit("There are not an equal number of .ali files and .log files!!")
+        print("There are not an equal number of .ali files and .log files!!")
 
 def parse_files(directory, file) -> list:
     """
@@ -133,6 +138,7 @@ def write_output(mod_ali_ls, ali_file, directory, output_directory):
 def __Main__(args):
     if type(args) == str:
         args = args.strip().split(" ")
+    
     directory = args[args.index("--dir") +1]
 
     duplicates = {}

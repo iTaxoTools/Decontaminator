@@ -22,9 +22,9 @@ def loadDirectory():
 
 def Run():
     """
-    Running devontamination script
+    Running decontamination script
     """
-    dc.__Main__(("--dir " + root.directory))
+    dc.__Main__("--dir " + str(root.directory))
     output.insert(END, "Run complete. Check input directory.\n")
 
 root.title("TaxoInflationAnalyzer")
