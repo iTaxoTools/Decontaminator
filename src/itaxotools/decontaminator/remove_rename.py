@@ -1,8 +1,9 @@
 #### rename_seq #####
-import Utils
 import glob
 import os
 import sys
+
+from . import Utils
 
 __usage__ = """
         python3 remove_rename.py
@@ -242,12 +243,12 @@ def __Main__(args):
                 Utils.write_decont_output(dir_path, filename, data_extracted, type="protein", folder = "extracted_seqs")
             else:
                 Utils.write_decont_output(dir_path, filename, data_extracted, type="nuclotide", folder = "extracted_seqs")
+def run():
+    if not sys.argv:
+        print("")
 
-if not sys.argv:
-    print("")
+    elif "--dir" in sys.argv:
+        __Main__(sys.argv)
 
-elif "--dir" in sys.argv:
-    __Main__(sys.argv)
-
-else:
-    print(__usage__)
+    else:
+        print(__usage__)

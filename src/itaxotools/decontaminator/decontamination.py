@@ -163,11 +163,12 @@ def __Main__(args):
         for file, sequenceids in duplicates.items():
             print("In file " + file + " these sequence names have duplicates: " + str(sequenceids))
 
-if not sys.argv:
-    print("")
+def run():
+    if not sys.argv:
+        print("")
 
-elif "--dir" in sys.argv:
-    __Main__(sys.argv)
+    elif "--dir" in sys.argv:
+        __Main__(sys.argv)
 
-else:
-    print(__usage__)
+    else:
+        print(__usage__)

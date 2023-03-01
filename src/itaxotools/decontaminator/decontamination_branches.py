@@ -2,8 +2,6 @@
 ### David Leiße ###
 ### david.leisse@uni-bielefeld.de###
 
-import Utils
-
 import shutil
 import dendropy as den
 import os.path
@@ -16,6 +14,7 @@ from genericpath import isdir
 import numpy as np
 import logging
 
+from . import Utils
 
 __Usage__ = """
             python3 decontamination_branches.py
@@ -279,11 +278,12 @@ def __Main__(cmdline):
             decontaminate_files(target, dataset, leafs, dest, tree)
             logging.info("")
 
-if not sys.argv:
-    print("")
+def run():
+    if not sys.argv:
+        print("")
 
-elif "--dir" in sys.argv:
-    __Main__(sys.argv)
+    elif "--dir" in sys.argv:
+        __Main__(sys.argv)
 
-else:
-    print(__Usage__)
+    else:
+        print(__Usage__)

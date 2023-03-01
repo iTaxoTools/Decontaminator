@@ -3,11 +3,11 @@
 ### david.leisse@uni-bielefeld.de###
 
 import sys
-import Utils
 import re
 from os import listdir
 from os.path import isfile, join
 
+from . import Utils
 
 __Usage__ = """
             python3 lengthdecont.py
@@ -79,8 +79,8 @@ def __Main__(args):
         Utils.write_decont_output(directory, file, filtered_seq_ls, type)
 
 
-
-if "--dir" in sys.argv and "--thresh" in sys.argv and "--mode" in sys.argv and "--type" in sys.argv:
-    __Main__(sys.argv)
-else:
-    print(__Usage__)
+def run():
+    if "--dir" in sys.argv and "--thresh" in sys.argv and "--mode" in sys.argv and "--type" in sys.argv:
+        __Main__(sys.argv)
+    else:
+        print(__Usage__)
