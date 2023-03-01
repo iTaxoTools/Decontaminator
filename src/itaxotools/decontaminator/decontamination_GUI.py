@@ -1,13 +1,16 @@
 ##### Version 1.0 ######
 #### David Leiße #######
 ##### david.leisse@uni-bielefeld.de #####
+#####!!!!!Only for reference!!!! Does not work anymore when using the module!!!#####
 
-import decontamination as dc
 
 import os
 from tkinter import *
 from tkinter import simpledialog, messagebox
 from tkinter import filedialog
+
+import decontamination as dc
+
 
 root = Tk()
 root.directory = ""
