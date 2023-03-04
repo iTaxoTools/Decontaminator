@@ -4,7 +4,7 @@
 
 from genericpath import isdir
 from os import listdir, mkdir
-from os.path import splitext, isfile, join
+from os.path import splitext, isfile, join, basename
 from ssl import ALERT_DESCRIPTION_UNKNOWN_PSK_IDENTITY
 import sys
 
@@ -26,9 +26,9 @@ def get_files(directory: str) -> list:
     """
 
     onlyfiles = [join(directory, f) for f in listdir(directory) if isfile(join(directory, f))]
-    ali = [f.split("/")[-1] for f in onlyfiles if splitext(f)[-1] == ".ali"]
+    ali = [basename(f) for f in onlyfiles if splitext(f)[-1] == ".ali"]
     ali.sort()
-    log = [f.split("/")[-1] for f in onlyfiles if splitext(f)[-1] == ".log"]
+    log = [basename(f) for f in onlyfiles if splitext(f)[-1] == ".log"]
     log.sort()
     index = len(log)
     if not len(log) == len(ali):
