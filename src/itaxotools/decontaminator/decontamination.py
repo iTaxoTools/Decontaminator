@@ -100,7 +100,6 @@ def log_task(commands: dict, ali_ls: list):
         if task == "remove_seq":
             print("remove " + str(id))
             idx_ls = [idx for idx,i in enumerate(mod_ali_ls) if id in i]
-            print(idx_ls)
             if len(idx_ls) >= 2:
                     relevant_duplicates.append(id)
             for idx in idx_ls:
@@ -132,7 +131,6 @@ def write_output(mod_ali_ls, ali_file, directory, output_directory):
         out.write("#\n")
         out.write("#\n")
         for id,seq in mod_ali_ls:
-            print(id)
             out.write(">" + id + "\n")
             out.write(seq + "\n")
 
@@ -150,9 +148,9 @@ def __Main__(args):
         print("Processing file number: " + str(idx+1))
         filepath = join(directory, entry)
         ali_ls = Utils.load_fasta_ali_file(filepath, change=False)
-        commands = Utils.load_log_commands(log[idx])
+        logpath = join(directory,log[idx])
+        commands = Utils.load_log_commands(logpath)
         mod_ali_ls, relevant_duplicates_ls, extracted_ls = log_task(commands, ali_ls)
-        print(len(extracted_ls))
         if relevant_duplicates_ls:
             duplicates[entry] = relevant_duplicates_ls
     
