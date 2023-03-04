@@ -1,0 +1,5 @@
+remove_seq <"Xenophrys sangzhiensis_GB@24284">
+remove_seq <"Hellenolacerta graeca@2043">
+
+extract_seq <"Phrynocephalus putjatai@50629">
+extract_seq <"Rana pyreneica_TXO21@25215">
