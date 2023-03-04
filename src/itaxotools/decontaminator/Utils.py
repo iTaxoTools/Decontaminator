@@ -26,7 +26,7 @@ def load_tree(string: str, mode: str, schema: str) -> dendropy.Tree:
         
     return tree
 
-def load_fasta_ali_file(file: str) -> list:
+def load_fasta_ali_file(file: str, change:bool=True) -> list:
     """
     Loading fasta file into list. List containing lists with each an ID and sequence
 
@@ -52,13 +52,25 @@ def load_fasta_ali_file(file: str) -> list:
                 
             sequence = []
             header = line[1:].strip()
-            for character in characters:
-                if character in header:
-                    header = header.replace(character, "_")
+            if change == True:
+                for character in characters:
+                    if character in header:
+                        header = header.replace(character, "_")
 
             line = f.readline()
     
     return ls
+
+def load_log_commands(file: str) -> dict:
+    commands = {}
+    with open(file, "r") as f:
+        line = f.readline()
+        while line:
+            line = line.strip().split(" ")
+            commands[" ".join(line[1:3]).replace('"',"").replace("<","").replace(">","")] = line[0]
+            line = f.readline()
+
+    return commands
 
 def write_decont_output(directory: str, file: str, seq_ls: list, type: str, folder = "decontaminated"):
     """
