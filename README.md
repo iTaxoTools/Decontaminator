@@ -1,3 +1,5 @@
+!!Note that Decontaminator is work in progress and not yet fully tested!!
+
 # decontamination branches
 Searching for branches in tree that exceed a certain length 
 and deleting all sequences in corresponding .ali and .fasta files that are descendants from this branch.
